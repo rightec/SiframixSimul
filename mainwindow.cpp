@@ -21,10 +21,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->m_cmb_CalibState->addItem("STATO_IDLE");
     ui->m_cmb_CalibState->addItem("STATO_CALIBRAZIONE_FABBRICA");
 
-    eePromCalibFactoryFiles[0].setFileName("EEPROM_CHAN_1_FACTORY.txt");
-    eePromCalibFactoryFiles[1].setFileName("EEPROM_CHAN_2_FACTORY.txt");
-    eePromCalibIdleFiles[0].setFileName("EEPROM_CHAN_1_IDLE.txt");
-    eePromCalibIdleFiles[1].setFileName("EEPROM_CHAN_2_IDLE.txt");
+    m_eePromCalibFactoryFiles[0] = new QFile("EEPROM_CHAN_1_FACTORY.txt");
+    m_eePromCalibFactoryFiles[1] = new QFile("EEPROM_CHAN_2_FACTORY.txt");
+    m_eePromCalibIdleFiles[0] = new QFile("EEPROM_CHAN_1_IDLE.txt");
+    m_eePromCalibIdleFiles[1] = new QFile("EEPROM_CHAN_2_IDLE.txt");
+
+    setYellow();
 }
 
 MainWindow::~MainWindow()
@@ -34,38 +36,119 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
+    bool b_Error = false;
+    setYellow();
     if (siframixSimul.readLoadInLine15() == false)
     {
         qDebug() << "readLoadInLine15() Fails";
+        b_Error = true;
     } else {
         qDebug() << "readLoadInLine15() Succeeded";
         if(StatusCmd.status == STATO_CALIBRAZIONE_FABBRICA) {
             // Save in the relevant file for CALIBRAZIONE_FABBRICA
-            // Saving the following on file
-            /* _ADC1_,
-             * Chan[_ADC1_].WeightFactoryGain,
-             * Chan[_ADC1_].AdcTo2Kg,
-             * Chan[_ADC1_].AdcTo2Kg_dx
-             * */
-            if ( eePromCalibFactoryFiles[0].open(QIODevice::ReadWrite) )
+            if ( m_eePromCalibFactoryFiles[0]->open(QIODevice::ReadWrite) )
             {
-                QTextStream stream( &eePromCalibFactoryFiles[0] );
-                stream << "something" << '\n';
+                m_eePromCalibFactoryFiles[0]->reset();
+                QTextStream stream( m_eePromCalibFactoryFiles[0] );
+                QString s_Log;
+                QString s_Adc = QString::number(_ADC1_);
+                QString s_WeightFactoryGain_ADC1 = QString::number(Chan[_ADC1_].WeightFactoryGain);
+                QString s_AdcTo2Kg_ADC1 = QString::number(Chan[_ADC1_].AdcTo2Kg);
+                QString s_AdcTo2Kg_dx_ADC1 = QString::number(Chan[_ADC1_].AdcTo2Kg_dx);
+                stream << s_Adc << "; " <<
+                          s_WeightFactoryGain_ADC1 << "; " <<
+                          s_AdcTo2Kg_ADC1 << "; " <<
+                          s_AdcTo2Kg_dx_ADC1 << "; " <<'\n';
+                s_Log = s_Adc + "; " + s_WeightFactoryGain_ADC1 + "; " + s_AdcTo2Kg_ADC1 + "; " + s_AdcTo2Kg_dx_ADC1 + '\n';
+                ui->m_Txt_Log->appendPlainText(s_Log);
+
+                m_eePromCalibFactoryFiles[0]->close();
+
+            } else {
+                qDebug() << "m_eePromCalibFactoryFiles[0] Error File";
+                b_Error = true;
+            }
+
+            if ( m_eePromCalibFactoryFiles[1]->open(QIODevice::ReadWrite) )
+            {
+                m_eePromCalibFactoryFiles[1]->reset();
+                QString s_Log;
+                QTextStream stream( m_eePromCalibFactoryFiles[1] );
+                QString s_Adc = QString::number(_ADC2_);
+                QString s_WeightFactoryGain_ADC2 = QString::number(Chan[_ADC2_].WeightFactoryGain);
+                QString s_AdcTo2Kg_ADC2 = QString::number(Chan[_ADC2_].AdcTo2Kg);
+                QString s_AdcTo2Kg_dx_ADC2 = QString::number(Chan[_ADC2_].AdcTo2Kg_dx);
+                stream << s_Adc << "; " <<
+                          s_WeightFactoryGain_ADC2 << "; " <<
+                          s_AdcTo2Kg_ADC2 << "; " <<
+                          s_AdcTo2Kg_dx_ADC2 << "; " <<'\n';
+                s_Log = s_Adc + "; " + s_WeightFactoryGain_ADC2 + "; " + s_AdcTo2Kg_ADC2 + "; " + s_AdcTo2Kg_dx_ADC2 + '\n';
+                ui->m_Txt_Log->appendPlainText(s_Log);
+
+                m_eePromCalibFactoryFiles[1]->close();
+
+            } else {
+                qDebug() << "m_eePromCalibFactoryFiles[1] Error File";
+                b_Error = true;
             }
         } else {
             // Save in the relevant file for IDLE
+            if ( m_eePromCalibIdleFiles[0]->open(QIODevice::ReadWrite) )
+            {
+                /*_ADC1_, Chan[_ADC1_].Weightgain
+                 * */
+                m_eePromCalibIdleFiles[0]->reset();
+                QString s_Log;
+                QTextStream stream( m_eePromCalibIdleFiles[0] );
+                QString s_Adc = QString::number(_ADC1_);
+                QString s_WeightGain_ADC1 = QString::number(Chan[_ADC1_].Weightgain);
+                stream << s_Adc << "; " <<
+                          s_WeightGain_ADC1 << "; " << '\n';
+
+                s_Log = s_Adc + "; " + s_WeightGain_ADC1  + '\n';
+                ui->m_Txt_Log->appendPlainText(s_Log);
+
+                m_eePromCalibIdleFiles[0]->close();
+
+            } else {
+                qDebug() << "m_eePromCalibIdleFiles[0] Error File";
+                b_Error = true;
+            }
+
+            if ( m_eePromCalibIdleFiles[1]->open(QIODevice::ReadWrite) )
+            {
+                m_eePromCalibIdleFiles[1]->reset();
+                QString s_Log;
+                QTextStream stream( m_eePromCalibIdleFiles[1] );
+                QString s_Adc = QString::number(_ADC2_);
+                QString s_WeightGain_ADC2 = QString::number(Chan[_ADC2_].Weightgain);
+                stream << s_Adc << "; " <<
+                          s_WeightGain_ADC2 << "; " << '\n';
+                s_Log = s_Adc + "; " + s_WeightGain_ADC2  + '\n';
+                ui->m_Txt_Log->appendPlainText(s_Log);
+
+                m_eePromCalibIdleFiles[1]->close();
+
+            } else {
+                qDebug() << "m_eePromCalibIdleFiles[1] Error File";
+                b_Error = true;
+            }
         }
     }
 
-}
+    if (b_Error == true){
+        setRed();
+    } else {
+        setGreen();
+    }
 
+}
 
 void MainWindow::on_m_btn_SaveWeightSample_clicked()
 {
     siframixSimul.m_WeightSample[0] = ui->m_txt_WeightSample1->text().toULong();
     siframixSimul.m_WeightSample[1] = ui->m_txt_WeightSample2->text().toULong();
 }
-
 
 void MainWindow::on_m_btn_SaveOffsetChannel_clicked()
 {
@@ -95,7 +178,6 @@ void MainWindow::on_checkBox_stateChanged(int arg1)
     }
 }
 
-
 void MainWindow::on_checkBox_2_stateChanged(int arg1)
 {
     if (arg1 == 0){
@@ -105,3 +187,29 @@ void MainWindow::on_checkBox_2_stateChanged(int arg1)
     }
 }
 
+void MainWindow::on_pushButton_2_clicked()
+{
+    ui->m_Txt_Log->clear();
+    setYellow();
+}
+
+void MainWindow::setYellow()
+{
+    ui->m_lbl_green->setStyleSheet("Background-color: white;");
+    ui->m_lbl_yellow->setStyleSheet("Background-color: yellow;");
+    ui->m_lbl_red->setStyleSheet("Background-color: white;");
+}
+
+void MainWindow::setRed()
+{
+    ui->m_lbl_green->setStyleSheet("Background-color: white;");
+    ui->m_lbl_yellow->setStyleSheet("Background-color: white;");
+    ui->m_lbl_red->setStyleSheet("Background-color: red;");
+}
+
+void MainWindow::setGreen()
+{
+    ui->m_lbl_green->setStyleSheet("Background-color: green;");
+    ui->m_lbl_yellow->setStyleSheet("Background-color: white;");
+    ui->m_lbl_red->setStyleSheet("Background-color: white;");
+}

@@ -7,26 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>1124</width>
-    <height>707</height>
+    <height>778</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="pushButton">
-    <property name="geometry">
-     <rect>
-      <x>910</x>
-      <y>510</y>
-      <width>121</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Run simulation</string>
-    </property>
-   </widget>
    <widget class="QFrame" name="frame_9">
     <property name="geometry">
      <rect>
@@ -56,13 +43,13 @@
          <widget class="QLabel" name="m_lbl_WeightSampleTitle">
           <property name="font">
            <font>
-            <pointsize>14</pointsize>
+            <pointsize>12</pointsize>
             <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
           <property name="text">
-           <string>INPUT WEIGHT SAMPLE</string>
+           <string>INPUT WEIGHT SAMPLE - m_WeightSample</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -90,7 +77,7 @@
               <item>
                <widget class="QLabel" name="label">
                 <property name="text">
-                 <string>SAMPLE 1</string>
+                 <string>CHAN 1</string>
                 </property>
                </widget>
               </item>
@@ -112,7 +99,7 @@
               <item>
                <widget class="QLabel" name="label_2">
                 <property name="text">
-                 <string>SAMPLE 2</string>
+                 <string>CHAN 2</string>
                 </property>
                </widget>
               </item>
@@ -160,13 +147,13 @@
          <widget class="QLabel" name="m_lbl_WeightSampleTitle_2">
           <property name="font">
            <font>
-            <pointsize>14</pointsize>
+            <pointsize>12</pointsize>
             <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
           <property name="text">
-           <string>CHANNEL OFFSET</string>
+           <string>CHANNEL OFFSET - weightChan-&gt;getOffset</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -258,8 +245,8 @@
      <rect>
       <x>40</x>
       <y>240</y>
-      <width>371</width>
-      <height>183</height>
+      <width>501</width>
+      <height>201</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -282,13 +269,16 @@
          <widget class="QLabel" name="label_5">
           <property name="font">
            <font>
-            <pointsize>14</pointsize>
+            <pointsize>12</pointsize>
             <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
           <property name="text">
            <string>SET CALIBRATION STATE</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -314,14 +304,131 @@
         <item>
          <widget class="QCheckBox" name="checkBox">
           <property name="text">
-           <string>Channel 1 CALIBRATION</string>
+           <string>Channel 1 CALIBRATION (Chan[_ADC1_].AreCalibrate)</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QCheckBox" name="checkBox_2">
           <property name="text">
-           <string>Channel 2 CALIBRATION</string>
+           <string>Channel 2 CALIBRATION (Chan[_ADC2_].AreCalibrate)</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QFrame" name="frame_13">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>490</y>
+      <width>1061</width>
+      <height>191</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_8">
+     <item>
+      <widget class="QFrame" name="frame_16">
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_9">
+        <item>
+         <widget class="QPlainTextEdit" name="m_Txt_Log">
+          <property name="maximumSize">
+           <size>
+            <width>900</width>
+            <height>16777215</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QFrame" name="frame_15">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_9">
+           <item>
+            <widget class="QLabel" name="m_lbl_red">
+             <property name="frameShape">
+              <enum>QFrame::Box</enum>
+             </property>
+             <property name="lineWidth">
+              <number>2</number>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="m_lbl_yellow">
+             <property name="frameShape">
+              <enum>QFrame::Box</enum>
+             </property>
+             <property name="lineWidth">
+              <number>2</number>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="m_lbl_green">
+             <property name="frameShape">
+              <enum>QFrame::Box</enum>
+             </property>
+             <property name="lineWidth">
+              <number>2</number>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QFrame" name="frame_14">
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_8">
+        <item>
+         <widget class="QPushButton" name="pushButton">
+          <property name="text">
+           <string>Run simulation</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_2">
+          <property name="text">
+           <string>Clear</string>
           </property>
          </widget>
         </item>

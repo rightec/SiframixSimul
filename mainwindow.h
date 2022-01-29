@@ -35,10 +35,16 @@ private slots:
 
     void on_checkBox_2_stateChanged(int arg1);
 
+    void on_pushButton_2_clicked();
+
 private:
     Ui::MainWindow *ui;
-    QFile eePromCalibFactoryFiles[2];
-    QFile eePromCalibIdleFiles[2];
+    QFile *m_eePromCalibFactoryFiles[2];
+    QFile *m_eePromCalibIdleFiles[2];
+
+    void setYellow();
+    void setRed();
+    void setGreen();
 };
 
 #endif // MAINWINDOW_H
