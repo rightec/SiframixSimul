@@ -25,6 +25,7 @@ bool SIFRA_Manager::readLoadInLine15()
     //float this_gain_15;
     float cal_adc_system;
 
+ #ifdef
     if (m_WeightSample[_ADC1_] >= weightChan->getOffset(_ADC1_)){
             d_adc_gain_cell_8 = m_WeightSample[_ADC1_] - weightChan->getOffset(_ADC1_);
             adc_gain_cell_8 = (int)d_adc_gain_cell_8 ;
@@ -43,9 +44,10 @@ bool SIFRA_Manager::readLoadInLine15()
             adc_gain_cell_15 = (int)d_adc_gain_cell_15 ;*/
             return false;
     }
+#endif // VERIFY_NEGATIVE
 
-    // adc_gain_cell_8 = (int)m_WeightSample[_ADC1_] - (int)weightChan->getOffset(_ADC1_);
-    //adc_gain_cell_15 = (int)m_WeightSample[_ADC2_] - (int)weightChan->getOffset(_ADC2_);
+    adc_gain_cell_8 = (int)m_WeightSample[_ADC1_] - (int)weightChan->getOffset(_ADC1_);
+    adc_gain_cell_15 = (int)m_WeightSample[_ADC2_] - (int)weightChan->getOffset(_ADC2_);
 
     //this_gain_8 = (2000.0 /(float)((int)m_WeightSample[_ADC1_] - (int)weightChan->getOffset(_ADC1_)));
     //this_gain_15 = (2000.0 /(float)((int)m_WeightSample[_ADC2_] - (int)weightChan->getOffset(_ADC2_)));

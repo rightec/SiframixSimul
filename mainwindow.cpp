@@ -40,8 +40,13 @@ void MainWindow::on_m_btn_SaveWeightSample_clicked()
 
 void MainWindow::on_m_btn_SaveOffsetChannel_clicked()
 {
+    QString temp = ui->m_txt_OffsetChannel1->text();
+    bool bTemp = false;
+    long tempLomg = temp.toLong(&bTemp,10);
     weightChan->setOffset(0, ui->m_txt_OffsetChannel1->text().toLong());
                           // long _offset)
     weightChan->setOffset(1, ui->m_txt_OffsetChannel2->text().toLong());
 }
+
+
 
