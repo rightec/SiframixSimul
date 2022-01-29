@@ -2,8 +2,8 @@
 #include "generichwchanmanager.h"
 
 
-static STRUCTSTATUSCMD StatusCmd;
-static ChannelsBackupParam Chan[_MAX_LOAD_CHAN_];
+STRUCTSTATUSCMD StatusCmd;
+ChannelsBackupParam Chan[_MAX_LOAD_CHAN_];
 // GenericHwChanManager <dword, _WEIGHT_BUFFER_LENGTH_> *weightChan;
 extern GenericHwChanManager  *weightChan;
 
@@ -25,7 +25,7 @@ bool SIFRA_Manager::readLoadInLine15()
     //float this_gain_15;
     float cal_adc_system;
 
- #ifdef
+ #ifdef VERIFY_NEGATIVE
     if (m_WeightSample[_ADC1_] >= weightChan->getOffset(_ADC1_)){
             d_adc_gain_cell_8 = m_WeightSample[_ADC1_] - weightChan->getOffset(_ADC1_);
             adc_gain_cell_8 = (int)d_adc_gain_cell_8 ;
@@ -54,7 +54,8 @@ bool SIFRA_Manager::readLoadInLine15()
 
     if(StatusCmd.status == STATO_CALIBRAZIONE_FABBRICA)
     {
-        if(Chan[_ADC1_].AreCalibrate && Chan[_ADC1_].AreCalibrate)
+//        if(Chan[_ADC1_].AreCalibrate && Chan[_ADC1_].AreCalibrate) - Of course it is an error
+        if(Chan[_ADC1_].AreCalibrate && Chan[_ADC2_].AreCalibrate)
         {
             if((adc_gain_cell_8 > ((int)Chan[_ADC1_].AdcTo2Kg_dx - _DELTA_ADC_0Kg_DEF)) &&
                     (adc_gain_cell_8 < ((int)Chan[_ADC1_].AdcTo2Kg_dx + _DELTA_ADC_0Kg_DEF)))
