@@ -179,6 +179,7 @@ public:
     SIFRA_Manager();
 
     bool readLoadInLine15();
+    bool readLoadInLine8();
 
 
     dword m_WeightSample[_MAX_LOAD_CHAN_];

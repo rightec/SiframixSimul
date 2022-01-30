@@ -213,3 +213,116 @@ void MainWindow::setGreen()
     ui->m_lbl_yellow->setStyleSheet("Background-color: white;");
     ui->m_lbl_red->setStyleSheet("Background-color: white;");
 }
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    bool b_Error = false;
+    setYellow();
+    if (siframixSimul.readLoadInLine8() == false)
+    {
+        qDebug() << "readLoadInLine8() Fails";
+        b_Error = true;
+    } else {
+        qDebug() << "readLoadInLine8() Succeeded";
+        if(StatusCmd.status == STATO_CALIBRAZIONE_FABBRICA) {
+            // Save in the relevant file for CALIBRAZIONE_FABBRICA
+#ifdef RUN8TODO
+            if ( m_eePromCalibFactoryFiles[0]->open(QIODevice::ReadWrite) )
+            {
+                m_eePromCalibFactoryFiles[0]->reset();
+                QTextStream stream( m_eePromCalibFactoryFiles[0] );
+                QString s_Log;
+                QString s_Adc = QString::number(_ADC1_);
+                QString s_WeightFactoryGain_ADC1 = QString::number(Chan[_ADC1_].WeightFactoryGain);
+                QString s_AdcTo2Kg_ADC1 = QString::number(Chan[_ADC1_].AdcTo2Kg);
+                QString s_AdcTo2Kg_dx_ADC1 = QString::number(Chan[_ADC1_].AdcTo2Kg_dx);
+                stream << s_Adc << "; " <<
+                          s_WeightFactoryGain_ADC1 << "; " <<
+                          s_AdcTo2Kg_ADC1 << "; " <<
+                          s_AdcTo2Kg_dx_ADC1 << "; " <<'\n';
+                s_Log = s_Adc + "; " + s_WeightFactoryGain_ADC1 + "; " + s_AdcTo2Kg_ADC1 + "; " + s_AdcTo2Kg_dx_ADC1 + '\n';
+                ui->m_Txt_Log->appendPlainText(s_Log);
+
+                m_eePromCalibFactoryFiles[0]->close();
+
+            } else {
+                qDebug() << "m_eePromCalibFactoryFiles[0] Error File";
+                b_Error = true;
+            }
+            if ( m_eePromCalibFactoryFiles[1]->open(QIODevice::ReadWrite) )
+            {
+                m_eePromCalibFactoryFiles[1]->reset();
+                QString s_Log;
+                QTextStream stream( m_eePromCalibFactoryFiles[1] );
+                QString s_Adc = QString::number(_ADC2_);
+                QString s_WeightFactoryGain_ADC2 = QString::number(Chan[_ADC2_].WeightFactoryGain);
+                QString s_AdcTo2Kg_ADC2 = QString::number(Chan[_ADC2_].AdcTo2Kg);
+                QString s_AdcTo2Kg_dx_ADC2 = QString::number(Chan[_ADC2_].AdcTo2Kg_dx);
+                stream << s_Adc << "; " <<
+                          s_WeightFactoryGain_ADC2 << "; " <<
+                          s_AdcTo2Kg_ADC2 << "; " <<
+                          s_AdcTo2Kg_dx_ADC2 << "; " <<'\n';
+                s_Log = s_Adc + "; " + s_WeightFactoryGain_ADC2 + "; " + s_AdcTo2Kg_ADC2 + "; " + s_AdcTo2Kg_dx_ADC2 + '\n';
+                ui->m_Txt_Log->appendPlainText(s_Log);
+
+                m_eePromCalibFactoryFiles[1]->close();
+
+            } else {
+                qDebug() << "m_eePromCalibFactoryFiles[1] Error File";
+                b_Error = true;
+            }
+ #endif
+        } else {
+           #ifdef RUN8TODO
+            // Save in the relevant file for IDLE
+            if ( m_eePromCalibIdleFiles[0]->open(QIODevice::ReadWrite) )
+            {
+                /*_ADC1_, Chan[_ADC1_].Weightgain
+                 * */
+                m_eePromCalibIdleFiles[0]->reset();
+                QString s_Log;
+                QTextStream stream( m_eePromCalibIdleFiles[0] );
+                QString s_Adc = QString::number(_ADC1_);
+                QString s_WeightGain_ADC1 = QString::number(Chan[_ADC1_].Weightgain);
+                stream << s_Adc << "; " <<
+                          s_WeightGain_ADC1 << "; " << '\n';
+
+                s_Log = s_Adc + "; " + s_WeightGain_ADC1  + '\n';
+                ui->m_Txt_Log->appendPlainText(s_Log);
+
+                m_eePromCalibIdleFiles[0]->close();
+
+            } else {
+                qDebug() << "m_eePromCalibIdleFiles[0] Error File";
+                b_Error = true;
+            }
+
+            if ( m_eePromCalibIdleFiles[1]->open(QIODevice::ReadWrite) )
+            {
+                m_eePromCalibIdleFiles[1]->reset();
+                QString s_Log;
+                QTextStream stream( m_eePromCalibIdleFiles[1] );
+                QString s_Adc = QString::number(_ADC2_);
+                QString s_WeightGain_ADC2 = QString::number(Chan[_ADC2_].Weightgain);
+                stream << s_Adc << "; " <<
+                          s_WeightGain_ADC2 << "; " << '\n';
+                s_Log = s_Adc + "; " + s_WeightGain_ADC2  + '\n';
+                ui->m_Txt_Log->appendPlainText(s_Log);
+
+                m_eePromCalibIdleFiles[1]->close();
+
+            } else {
+                qDebug() << "m_eePromCalibIdleFiles[1] Error File";
+                b_Error = true;
+            }
+        #endif
+        }
+    }
+
+    if (b_Error == true){
+        setRed();
+    } else {
+        setGreen();
+    }
+
+}
